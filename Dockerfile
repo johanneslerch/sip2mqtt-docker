@@ -41,3 +41,7 @@ RUN mkdir /usr/src/pjsip && \
     make all install && \
     /sbin/ldconfig && \
     rm -rf /usr/src/pjsip
+RUN \
+  apt-get update && \
+  apt-get install -y python python-dev python-pip python-virtualenv && \
+  rm -rf /var/lib/apt/lists/*
