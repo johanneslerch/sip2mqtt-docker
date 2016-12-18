@@ -39,8 +39,8 @@ RUN mkdir /usr/src/pjsip && \
                 --prefix=/usr \
                 && \
     make all install && \
-    /sbin/ldconfig && \
-    rm -rf /usr/src/pjsip
+    /sbin/ldconfig # && \
+ #   rm -rf /usr/src/pjsip
 RUN \
   apt-get update && \
   apt-get install -y python python-dev python-pip python-virtualenv && \
