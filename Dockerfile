@@ -15,6 +15,10 @@ RUN apt-get update -qq && \
             libsrtp0-dev \
             libssl-dev \
             portaudio19-dev \
+            python \
+            python-dev \
+            python-pip \
+            python-virtualenv \
             && \
     apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
 
@@ -41,10 +45,6 @@ RUN mkdir /usr/src/pjsip && \
     make all install && \
     /sbin/ldconfig # && \
  #   rm -rf /usr/src/pjsip
-RUN \
-  apt-get update && \
-  apt-get install -y python python-dev python-pip python-virtualenv && \
-  rm -rf /var/lib/apt/lists/*
   
 RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
     make && make install
