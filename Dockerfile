@@ -22,6 +22,8 @@ RUN apt-get update -qq && \
             && \
     apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
 
+RUN pip install paho-mqtt
+
 COPY config_site.h /tmp/
 
 ENV PJSIP_VERSION=2.5.5
