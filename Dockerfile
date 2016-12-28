@@ -52,4 +52,6 @@ RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
     python setup.py build && python setup.py install
 
 ADD sip2mqtt.py /opt/sip2mqtt/
-ADD sipcfg.py.sample /opt/sip2mqtt/
+ADD sip2mqttcfg.py.sample /opt/sip2mqtt/
+
+CMD ["python", "/opt/sip2mqtt/sip2mqtt.py", ""]
