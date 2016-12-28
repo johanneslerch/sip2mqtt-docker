@@ -1,7 +1,0 @@
-trans_conf_port = 5060
-trans_conf_bound_addr = ""
-
-domain = "sip.sample.com"
-username = "sample"
-password = "SaMplE"
-display = "Sample"
