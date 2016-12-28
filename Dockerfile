@@ -47,7 +47,7 @@ RUN mkdir /usr/src/pjsip && \
  #   rm -rf /usr/src/pjsip
 
 RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
-    make && make install
+    python setup.py build && python setup.py install
 
 ADD sip2mqtt.py /opt/sip2mqtt/
 ADD sipcfg.py.sample /opt/sip2mqtt/
