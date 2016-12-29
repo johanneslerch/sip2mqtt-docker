@@ -1,7 +1,7 @@
 # -*- Dockerfile -*-
 
 FROM debian:jessie
-MAINTAINER Respoke <info@respoke.io>
+MAINTAINER MartyTremblay
 
 RUN apt-get update -qq && \
     DEBIAN_FRONTEND=noninteractive \
@@ -48,10 +48,11 @@ RUN mkdir /usr/src/pjsip && \
     /sbin/ldconfig # && \
  #   rm -rf /usr/src/pjsip
 
+ADD sip2mqtt.py /opt/sip2mqtt/
+ADD sip2mqttcfg.py.sample /opt/sip2mqtt/
+
 RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
     python setup.py build && python setup.py install
 
-ADD sip2mqtt.py /opt/sip2mqtt/
-ADD sip2mqttcfg.py.sample /opt/sip2mqtt/
 
 #CMD ["python", "/opt/sip2mqtt/sip2mqtt.py", ""]
