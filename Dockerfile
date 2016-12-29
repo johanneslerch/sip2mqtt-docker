@@ -54,4 +54,4 @@ RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
 ADD sip2mqtt.py /opt/sip2mqtt/
 ADD sip2mqttcfg.py.sample /opt/sip2mqtt/
 
-CMD ["python", "/opt/sip2mqtt/sip2mqtt.py", ""]
+#CMD ["python", "/opt/sip2mqtt/sip2mqtt.py", ""]
