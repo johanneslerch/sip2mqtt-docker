@@ -48,8 +48,7 @@ RUN mkdir /usr/src/pjsip && \
     /sbin/ldconfig # && \
  #   rm -rf /usr/src/pjsip
 
-ADD sip2mqtt.py /opt/sip2mqtt/
-ADD sip2mqttcfg.py.sample /opt/sip2mqtt/
+ADD https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py /opt/sip2mqtt/
 
 RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
     python setup.py build && python setup.py install
