@@ -48,7 +48,7 @@ RUN mkdir /usr/src/pjsip && \
     /sbin/ldconfig # && \
  #   rm -rf /usr/src/pjsip
 
-ADD https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py /opt/sip2mqtt/
+ADD https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py /opt/sip2mqtt/sip2mqtt.py
 
 RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
     python setup.py build && python setup.py install
