@@ -1,59 +1,53 @@
 # -*- Dockerfile -*-
+FROM arm64v8/ubuntu
+ENV LANG=C.UTF-8
 
-FROM debian:jessie
-MAINTAINER MartyTremblay
+ARG VERSION_PJSIP=2.10
 
-RUN apt-get update -qq && \
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get install -y --no-install-recommends \
-            build-essential \
-            ca-certificates \
-            curl \
-            libgsm1-dev \
-            libspeex-dev \
-            libspeexdsp-dev \
-            libsrtp0-dev \
-            libssl-dev \
-            portaudio19-dev \
-            python \
-            python-dev \
-            python-pip \
-            python-virtualenv \
-            && \
-    apt-get purge -y --auto-remove && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    python2 \
+    python-pip \
+    libssl-dev \
+    libsrtp2-dev \
+    libgsm1-dev \
+    libspeex-dev \
+    portaudio19-dev \
+    python2-dev \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip install paho-mqtt
+# Upgrade pip
+RUN python2 -m pip install --upgrade pip setuptools
+RUN python2 -m pip install paho-mqtt
 
-COPY config_site.h /tmp/
-
-ENV PJSIP_VERSION=2.5.5
-RUN mkdir /usr/src/pjsip && \
-    cd /usr/src/pjsip && \
-    curl -vsL http://www.pjsip.org/release/${PJSIP_VERSION}/pjproject-${PJSIP_VERSION}.tar.bz2 | \
-         tar --strip-components 1 -xj && \
-    mv /tmp/config_site.h pjlib/include/pj/ && \
-    CFLAGS="-O2 -DNDEBUG" \
-    ./configure --enable-shared \
-                --disable-opencore-amr \
-                --disable-resample \
-                --disable-sound \
-                --disable-video \
-                --with-external-gsm \
-                --with-external-pa \
-                --with-external-speex \
-                --with-external-srtp \
-                --prefix=/usr \
-                && \
-    make all install && \
-    /sbin/ldconfig # && \
- #   rm -rf /usr/src/pjsip
-
-#ADD https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py /opt/sip2mqtt/sip2mqtt.py
-RUN curl -L https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py -o /opt/sip2mqtt/sip2mqtt.py
-#RUN wget https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py -O /opt/sip2mqtt/sip2mqtt.py
-
-RUN cd /usr/src/pjsip/pjsip-apps/src/python && \
-    python setup.py build && python setup.py install
+RUN ln -s /usr/bin/python2 /usr/bin/python
 
 
-CMD ["python", "/opt/sip2mqtt/sip2mqtt.py", ""]
+RUN mkdir -p /opt/sip2mqtt
+
+RUN wget -O /opt/sip2mqtt/sip2mqtt.py https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py
+
+WORKDIR /
+
+RUN wget -O /tmp/sip2mqtt.tar.gz "https://github.com/pjsip/pjproject/archive/${VERSION_PJSIP}.tar.gz" && tar -xzf /tmp/sip2mqtt.tar.gz -C / 
+
+RUN cd "pjproject-${VERSION_PJSIP}" \
+    && ./configure \
+        --disable-libwebrtc \
+        --with-external-srtp \
+        --enable-shared \
+        --disable-sound \
+        --disable-sdl \
+        --disable-speex-aec \
+        --disable-video \
+        --prefix=/usr \
+    && make dep \
+    && make \
+    && make install \
+    && cd pjsip-apps/src/python \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf "pjproject-${VERSION_PJSIP}"
+
+CMD ["/bin/sh", "-c", "python /opt/sip2mqtt/sip2mqtt.py -a $MQTT_DOMAIN -t $MQTT_PORT -u $MQTT_USERNAME -d $SIP_DOMAIN -n $SIP_USERNAME -s $SIP_PASSWORD"]

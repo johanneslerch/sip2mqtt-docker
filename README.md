@@ -2,9 +2,9 @@
 
 Dockerfile for building pjsip and python_pjsip as a base for SIP applications.
 
-This Dockerfile currently builds Debian "jessie" release with pjsip pre-compiled.
-We apply a slight customization to the pjsip build to better support chan_respoke and
-WebRTC in general by increasing the maximum number of ice candidates that pjsip allows.
+This Dockerfile builds arm based ubuntu release with pjsip pre-compiled.
+Using `--disable-libwebrtc` as that fails to compile for arm.
+
 
 ## usage
 
