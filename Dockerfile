@@ -25,7 +25,7 @@ RUN ln -s /usr/bin/python2 /usr/bin/python
 
 RUN mkdir -p /opt/sip2mqtt
 
-RUN wget -O /opt/sip2mqtt/sip2mqtt.py https://raw.githubusercontent.com/MartyTremblay/sip2mqtt/master/sip2mqtt.py
+RUN wget -O /opt/sip2mqtt/sip2mqtt.py https://raw.githubusercontent.com/manutoky/sip2mqtt/master/sip2mqtt.py
 
 WORKDIR /
 
